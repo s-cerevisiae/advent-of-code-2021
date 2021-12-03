@@ -9,16 +9,13 @@ use itertools::{FoldWhile::*, Itertools};
 fn rating(diag: Vec<u32>, which: Which) -> u32 {
     (0..12)
         .rev()
-        .fold_while(diag, |acc, digit| {
+        .fold_while(diag, |mut acc, digit| {
             if acc.len() == 1 {
                 Done(acc)
             } else {
                 let count = Count::at_digit(&acc, digit);
-                Continue(
-                    acc.into_iter()
-                        .filter(|x| (x >> digit) & 1 == count.get_bit(which))
-                        .collect(),
-                )
+                acc.retain(|x| (x >> digit & 1) == count.get_bit(which));
+                Continue(acc)
             }
         })
         .into_inner()[0]
