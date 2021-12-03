@@ -1,6 +1,9 @@
 use std::fs;
 
-use advent_of_code_2021::day3::Count;
+use advent_of_code_2021::day3::{
+    Count,
+    Which::{Least, Most},
+};
 use itertools::Itertools;
 
 fn main() -> anyhow::Result<()> {
@@ -15,17 +18,16 @@ fn main() -> anyhow::Result<()> {
         .map(|i| Count::at_digit(&diagnostic, i))
         .collect_vec();
 
-    let gamma = digit_counts
-        .iter()
-        .enumerate()
-        .map(|(i, count)| count.most_common() << i)
-        .fold(0, |acc, d| acc | d);
+    let rate = |which| {
+        digit_counts
+            .iter()
+            .enumerate()
+            .map(|(i, count)| count.get_bit(which) << i)
+            .fold(0, |acc, d| acc | d)
+    };
 
-    let epsilon = digit_counts
-        .iter()
-        .enumerate()
-        .map(|(i, count)| count.least_common() << i)
-        .fold(0, |acc, d| acc | d);
+    let gamma = rate(Most);
+    let epsilon = rate(Least);
 
     println!("{}", gamma * epsilon);
     Ok(())

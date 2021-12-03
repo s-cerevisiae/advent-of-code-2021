@@ -13,17 +13,30 @@ impl Count {
         Self { zeros, ones }
     }
 
-    pub fn most_common(&self) -> u32 {
+    fn most_common(&self) -> u32 {
         match self.zeros.cmp(&self.ones) {
             Greater => 0,
             _ => 1,
         }
     }
 
-    pub fn least_common(&self) -> u32 {
+    fn least_common(&self) -> u32 {
         match self.zeros.cmp(&self.ones) {
             Greater if self.ones > 0 => 1,
             _ => 0,
         }
     }
+
+    pub fn get_bit(&self, c: Which) -> u32 {
+        match c {
+            Which::Most => self.most_common(),
+            Which::Least => self.least_common(),
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+pub enum Which {
+    Most,
+    Least,
 }

@@ -1,9 +1,12 @@
 use std::fs;
 
-use advent_of_code_2021::day3::Count;
+use advent_of_code_2021::day3::{
+    Count,
+    Which::{self, Least as CO2, Most as Oxygen},
+};
 use itertools::{FoldWhile::*, Itertools};
 
-fn oxygen_rating(diag: Vec<u32>) -> u32 {
+fn rating(diag: Vec<u32>, which: Which) -> u32 {
     (0..12)
         .rev()
         .fold_while(diag, |acc, digit| {
@@ -13,25 +16,7 @@ fn oxygen_rating(diag: Vec<u32>) -> u32 {
                 let count = Count::at_digit(&acc, digit);
                 Continue(
                     acc.into_iter()
-                        .filter(|x| (x >> digit) & 1 == count.most_common())
-                        .collect(),
-                )
-            }
-        })
-        .into_inner()[0]
-}
-
-fn co2_rating(diag: Vec<u32>) -> u32 {
-    (0..12)
-        .rev()
-        .fold_while(diag, |acc, digit| {
-            if acc.len() == 1 {
-                Done(acc)
-            } else {
-                let count = Count::at_digit(&acc, digit);
-                Continue(
-                    acc.into_iter()
-                        .filter(|x| (x >> digit) & 1 == count.least_common())
+                        .filter(|x| (x >> digit) & 1 == count.get_bit(which))
                         .collect(),
                 )
             }
@@ -47,10 +32,9 @@ fn main() -> anyhow::Result<()> {
         .map(|l| u32::from_str_radix(l, 2))
         .collect::<Result<Vec<u32>, _>>()?;
 
-    let oxygen = oxygen_rating(diagnostic.clone());
-    let co2 = co2_rating(diagnostic.clone());
+    let oxygen = rating(diagnostic.clone(), Oxygen);
+    let co2 = rating(diagnostic.clone(), CO2);
 
-    println!("{:?}, {:?}", oxygen, co2);
-    println!("{:?}", oxygen * co2);
+    println!("{}", oxygen * co2);
     Ok(())
 }
