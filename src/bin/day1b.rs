@@ -2,7 +2,7 @@ use std::fs;
 
 use itertools::Itertools;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> anyhow::Result<()> {
     let input = fs::read_to_string("input/day1.txt")?;
 
     let result = input
