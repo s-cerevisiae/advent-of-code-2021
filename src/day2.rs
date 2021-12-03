@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 
 pub enum Command {
     Forward(i32),
@@ -19,7 +19,7 @@ impl FromStr for Command {
             "down" => Command::Down,
             "up" => Command::Up,
             _ => Err(anyhow!("Invalid Command Name"))?
-        }(dist.parse()?);
+        }(dist.parse().context("Invalid Command Parameter")?);
 
         Ok(command)
     }
