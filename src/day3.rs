@@ -8,7 +8,7 @@ pub struct Count {
 
 impl Count {
     pub fn at_digit(xs: &[u32], digit: u32) -> Count {
-        let ones = xs.into_iter().filter(|&x| x & (1 << digit) != 0).count();
+        let ones = xs.iter().filter(|&x| x & (1 << digit) != 0).count();
         let zeros = xs.len() - ones;
         Self { zeros, ones }
     }

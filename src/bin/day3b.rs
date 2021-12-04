@@ -26,7 +26,7 @@ fn main() -> anyhow::Result<()> {
         .collect::<Result<Vec<u32>, _>>()?;
 
     let oxygen = rating(diagnostic.clone(), Oxygen);
-    let co2 = rating(diagnostic.clone(), CO2);
+    let co2 = rating(diagnostic, CO2);
 
     println!("{}", oxygen * co2);
     Ok(())

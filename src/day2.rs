@@ -18,7 +18,7 @@ impl FromStr for Command {
             "forward" => Command::Forward,
             "down" => Command::Down,
             "up" => Command::Up,
-            _ => Err(anyhow!("Invalid Command Name"))?
+            _ => return Err(anyhow!("Invalid Command Name")),
         }(dist.parse().context("Invalid Command Parameter")?);
 
         Ok(command)
