@@ -4,21 +4,17 @@ use advent_of_code_2021::day3::{
     Count,
     Which::{self, Least as CO2, Most as Oxygen},
 };
-use itertools::{FoldWhile::*, Itertools};
 
-fn rating(diag: Vec<u32>, which: Which) -> u32 {
-    (0..12)
-        .rev()
-        .fold_while(diag, |mut acc, digit| {
-            if acc.len() == 1 {
-                Done(acc)
-            } else {
-                let count = Count::at_digit(&acc, digit);
-                acc.retain(|x| (x >> digit & 1) == count.get_bit(which));
-                Continue(acc)
-            }
-        })
-        .into_inner()[0]
+fn rating(mut diag: Vec<u32>, which: Which) -> u32 {
+    for digit in (0..12).rev() {
+        if diag.len() == 1 {
+            break;
+        }
+
+        let count = Count::at_digit(&diag, digit);
+        diag.retain(|x| (x >> digit) & 1 == count.get_bit(which));
+    }
+    diag[0]
 }
 
 fn main() -> anyhow::Result<()> {
