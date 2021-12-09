@@ -1,6 +1,6 @@
 type Pos = (usize, usize);
 
-fn surrondings(v: &Vec<Vec<u32>>, (x, y): Pos, (h, w): Pos) -> Vec<u32> {
+fn surrondings(v: &[Vec<u32>], (x, y): Pos, (h, w): Pos) -> Vec<u32> {
     let mut s = Vec::new();
     if 0 < x {
         s.push(v[y][x - 1]);

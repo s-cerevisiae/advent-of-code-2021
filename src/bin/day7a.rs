@@ -1,5 +1,6 @@
 use std::fs;
 
+use advent_of_code_2021::utils::abs_diff;
 use itertools::Itertools;
 
 fn main() -> anyhow::Result<()> {
@@ -8,7 +9,6 @@ fn main() -> anyhow::Result<()> {
     let mut pos: Vec<u32> = input.trim().split(',').map(|x| x.parse()).try_collect()?;
     pos.sort_unstable();
 
-    let abs_diff = |x, y| if x > y { x - y } else { y - x };
     let distance = |x| pos.iter().map(|&y| abs_diff(x, y)).sum();
 
     let median = pos[pos.len() / 2];

@@ -21,15 +21,15 @@ fn surrondings((x, y): Pos, (h, w): Pos) -> Vec<Pos> {
     s
 }
 
-fn search_from((x, y): Pos, (h, w): Pos, map: &[Vec<u32>], travelled: &mut HashSet<Pos>) -> u32 {
-    let neighbors = surrondings((x, y), (h, w));
+fn search_from(p: Pos, m: Pos, map: &[Vec<u32>], travelled: &mut HashSet<Pos>) -> u32 {
+    let neighbors = surrondings(p, m);
     let mut size = 0;
-    for (nx, ny) in neighbors {
-        if !travelled.insert((nx, ny)) {
+    for np@(ny, nx) in neighbors {
+        if !travelled.insert(np) {
             continue;
         }
         if map[ny][nx] < 9 {
-            size += 1 + search_from((nx, ny), (h, w), map, travelled);
+            size += 1 + search_from(np, m, map, travelled);
         }
     }
     size
@@ -52,12 +52,12 @@ fn main() -> anyhow::Result<()> {
 
     let mut basins = Vec::new();
     let mut travelled = HashSet::new();
-    for (x, y) in points {
-        if travelled.contains(&(x, y)) {
+    for p in points {
+        if travelled.contains(&p) {
             continue;
         }
 
-        let size = search_from((x, y), (h, w), &heightmap, &mut travelled);
+        let size = search_from(p, (h, w), &heightmap, &mut travelled);
         basins.push(size);
     }
     basins.sort_unstable();

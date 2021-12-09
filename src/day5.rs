@@ -1,6 +1,8 @@
 use std::str::FromStr;
 
-use anyhow::Context;
+use scan_fmt::scan_fmt;
+
+use crate::utils::abs_diff;
 
 type Pos = (usize, usize);
 
@@ -25,17 +27,8 @@ impl FromStr for Line {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (a, b) = s.split_once(" -> ").context("Invalid line")?;
+        let (x1, y1, x2, y2) = scan_fmt!(s, "({d},{d}) -> ({d}, {d})", usize, usize, usize, usize)?;
 
-        let parse_tuple = |t: &str| -> anyhow::Result<Pos> {
-            let (x, y) = t.split_once(',').context("Invalid endpoints")?;
-            Ok((x.parse()?, y.parse()?))
-        };
-
-        let (x1, y1) = parse_tuple(a)?;
-        let (x2, y2) = parse_tuple(b)?;
-
-        let abs_diff = |x, y| (x as i32 - y as i32).abs();
         let direction = if x1 == x2 {
             Horizontal
         } else if y1 == y2 {

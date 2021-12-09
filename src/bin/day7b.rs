@@ -1,5 +1,6 @@
 use std::fs;
 
+use advent_of_code_2021::utils::abs_diff;
 use anyhow::Context;
 use itertools::Itertools;
 
@@ -9,7 +10,6 @@ fn main() -> anyhow::Result<()> {
     let pos: Vec<u32> = input.trim().split(',').map(|x| x.parse()).try_collect()?;
 
     let fuel = |n| n * (n + 1) / 2;
-    let abs_diff = |x, y| if x > y { x - y } else { y - x };
     let distance = |x| pos.iter().map(|&y| fuel(abs_diff(x, y))).sum();
 
     let mean = pos.iter().sum::<u32>() / pos.len() as u32;
