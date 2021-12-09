@@ -4,7 +4,7 @@ use itertools::Itertools;
 
 type Pos = (usize, usize);
 
-fn surrondings((x, y): Pos, (h, w): Pos) -> Vec<Pos> {
+fn surroundings((x, y): Pos, (h, w): Pos) -> Vec<Pos> {
     let mut s = Vec::new();
     if 0 < x {
         s.push((x - 1, y));
@@ -22,7 +22,7 @@ fn surrondings((x, y): Pos, (h, w): Pos) -> Vec<Pos> {
 }
 
 fn search_from(p: Pos, m: Pos, map: &[Vec<u32>], travelled: &mut HashSet<Pos>) -> u32 {
-    let neighbors = surrondings(p, m);
+    let neighbors = surroundings(p, m);
     let mut size = 0;
     for np@(ny, nx) in neighbors {
         if !travelled.insert(np) {

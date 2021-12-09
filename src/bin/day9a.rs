@@ -1,6 +1,6 @@
 type Pos = (usize, usize);
 
-fn surrondings(v: &[Vec<u32>], (x, y): Pos, (h, w): Pos) -> Vec<u32> {
+fn surroundings(v: &[Vec<u32>], (x, y): Pos, (h, w): Pos) -> Vec<u32> {
     let mut s = Vec::new();
     if 0 < x {
         s.push(v[y][x - 1]);
@@ -32,7 +32,7 @@ fn main() -> anyhow::Result<()> {
     for y in 0..h {
         for x in 0..w {
             let p = heightmap[y][x];
-            let is_lowpoint = surrondings(&heightmap, (x, y), (h, w))
+            let is_lowpoint = surroundings(&heightmap, (x, y), (h, w))
                 .into_iter()
                 .all(|v| v > p);
             if is_lowpoint {
