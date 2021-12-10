@@ -1,33 +1,18 @@
 use itertools::Itertools;
 
 fn remaining_chars(s: &str) -> Option<Vec<char>> {
+    let is_pair = |x, y| matches!((x, y), ('(', ')') | ('[', ']') | ('{', '}') | ('<', '>'));
+
     let mut stack = Vec::new();
 
     for c in s.chars() {
-        let mut is_paired = |r| stack.pop().map(|l| l == r).unwrap_or(false);
         match c {
             '(' | '[' | '{' | '<' => stack.push(c),
-            ')' => {
-                if !is_paired('(') {
+            _ => {
+                if !stack.pop().map(|l| is_pair(l, c)).unwrap_or(false) {
                     return None;
                 }
             }
-            ']' => {
-                if !is_paired('[') {
-                    return None;
-                }
-            }
-            '}' => {
-                if !is_paired('{') {
-                    return None;
-                }
-            }
-            '>' => {
-                if !is_paired('<') {
-                    return None;
-                }
-            }
-            _ => unreachable!("Invalid input"),
         }
     }
 
@@ -54,7 +39,8 @@ fn completion_score(s: &[char]) -> u64 {
 fn main() -> anyhow::Result<()> {
     let input = std::fs::read_to_string("input/day10.txt")?;
 
-    let mut scores = input.lines()
+    let mut scores = input
+        .lines()
         .filter_map(|l| remaining_chars(l))
         .map(|s| completion_score(&s))
         .collect_vec();
