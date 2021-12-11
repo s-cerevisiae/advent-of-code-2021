@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use itertools::Itertools;
+use itertools::iproduct;
 
 pub type Pos = (usize, usize);
 pub type Grid = Vec<Vec<u32>>;
@@ -11,8 +11,8 @@ pub fn step(grid: &mut Grid) -> u32 {
     grid.iter_mut().flatten().for_each(|x| *x += 1);
 
     let mut flashed = HashSet::new();
-    for (x, y) in (0..10).cartesian_product(0..10) {
-        chain_flash((x, y), grid, &mut flashed);
+    for p in iproduct!(0..10, 0..10) {
+        chain_flash(p, grid, &mut flashed);
     }
 
     for x in grid.iter_mut().flatten() {
@@ -32,19 +32,18 @@ fn adjacent(x: usize, y: usize) -> Vec<Pos> {
     let xs = [x0, x0 + 1, x0 - 1];
     let ys = [y0, y0 + 1, y0 - 1];
 
-    xs.into_iter()
-        .cartesian_product(ys)
-        .filter(|&(x, y)| x >= 0 && x < 10 && y >= 0 && y < 10 && (x, y) != (x0, y0))
+    iproduct!(xs, ys)
+        .filter(|(x, y)| (0..10).contains(x) && (0..10).contains(y) && (*x, *y) != (x0, y0))
         .map(|(x, y)| (x as usize, y as usize))
         .collect()
 }
 
 fn chain_flash((x, y): Pos, grid: &mut Grid, flashed: &mut HashSet<Pos>) {
     if grid[y][x] > 9 && flashed.insert((x, y)) {
-        for (ax, ay) in adjacent(x, y) {
+        for ap @ (ax, ay) in adjacent(x, y) {
             grid[ay][ax] += 1;
-            if !flashed.contains(&(ax, ay)) {
-                chain_flash((ax, ay), grid, flashed);
+            if !flashed.contains(&ap) {
+                chain_flash(ap, grid, flashed);
             }
         }
     }

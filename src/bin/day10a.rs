@@ -35,7 +35,7 @@ fn score(s: &str) -> u32 {
 fn main() -> anyhow::Result<()> {
     let input = std::fs::read_to_string("input/day10.txt")?;
 
-    let total_score: u32 = input.lines().map(|l| score(l)).sum();
+    let total_score: u32 = input.lines().map(score).sum();
 
     println!("{}", total_score);
     Ok(())

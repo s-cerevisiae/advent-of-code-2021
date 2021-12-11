@@ -41,7 +41,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut scores = input
         .lines()
-        .filter_map(|l| remaining_chars(l))
+        .filter_map(remaining_chars)
         .map(|s| completion_score(&s))
         .collect_vec();
 
