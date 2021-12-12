@@ -1,16 +1,21 @@
 use std::collections::HashSet;
 
-use advent_of_code_2021::day12::{Edge, Map, is_big};
+use advent_of_code_2021::day12::{is_big, Edge, Map};
 use anyhow::Context;
 use itertools::Itertools;
 
 fn count_paths(graph: &Map) -> usize {
     let mut visited = HashSet::new();
     visited.insert("start");
-    traverse("start", &graph, &mut visited, true)
+    traverse("start", graph, &mut visited, true)
 }
 
-fn traverse<'n>(node: &'n str, graph: &'n Map, visited: &mut HashSet<&'n str>, twice: bool) -> usize {
+fn traverse<'n>(
+    node: &'n str,
+    graph: &'n Map,
+    visited: &mut HashSet<&'n str>,
+    twice: bool,
+) -> usize {
     let mut count = 0;
 
     for n in graph.neighbors(node) {
@@ -19,7 +24,8 @@ fn traverse<'n>(node: &'n str, graph: &'n Map, visited: &mut HashSet<&'n str>, t
         } else if is_big(n) || visited.insert(n) {
             count += traverse(n, graph, visited, twice);
             visited.remove(n);
-        } else if twice && n != "start" { // "end" is already checked
+        } else if twice && n != "start" {
+            // "end" is already checked
             count += traverse(n, graph, visited, false);
         }
     }

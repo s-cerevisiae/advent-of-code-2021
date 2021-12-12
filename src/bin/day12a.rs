@@ -1,13 +1,13 @@
 use std::collections::HashSet;
 
-use advent_of_code_2021::day12::{Edge, Map, is_big};
+use advent_of_code_2021::day12::{is_big, Edge, Map};
 use anyhow::Context;
 use itertools::Itertools;
 
 fn count_paths(graph: &Map) -> usize {
     let mut visited = HashSet::new();
     visited.insert("start");
-    traverse("start", &graph, &mut visited)
+    traverse("start", graph, &mut visited)
 }
 
 fn traverse<'n>(node: &'n str, graph: &'n Map, visited: &mut HashSet<&'n str>) -> usize {
