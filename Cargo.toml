@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
+defaultmap = "0.5"
 itertools = "^0.10"
 petgraph = "0.6"
 scan_fmt = "0.2"
